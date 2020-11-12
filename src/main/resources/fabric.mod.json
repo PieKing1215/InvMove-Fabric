@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "invmove",
+  "name": "InvMove",
+  "version": "${version}",
+
+  "environment": "client",
+  "description": "Lets you move while in inventories.",
+  "authors": [
+    "PieKing1215"
+  ],
+  "contact": {
+    "homepage": "https://github.com/PieKing1215/InvMove",
+    "sources": "https://github.com/PieKing1215/InvMove",
+    "issues": "https://github.com/PieKing1215/InvMove/issues"
+  },
+
+  "license": "GPL v3.0",
+  "icon": "assets/invmove/icon.png",
+
+  "entrypoints": {
+    "client": [
+      "me.pieking1215.invmove.InvMove"
+    ],
+    "modmenu": [
+      "me.pieking1215.invmove.InvMoveModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
