@@ -38,7 +38,7 @@ Made after [I couldn't find an existing mod for this](https://redd.it/egwe8w).
 In the config menu, you can find several options:<br>
 #### General:
 - Enable: Enable the entire mod
-- Debug Display: Enables a debug overlay that can help debug compatibility problems.
+- ~~Debug Display: Enables a debug overlay that can help debug compatibility problems.~~ (not ported yet)
 #### UI Movement:
 - Move In Inventories: Enable movement in inventories
 - Allow Sneaking: Allow sneaking in inventories (disabled by default because it's distracting when shift-clicking)
