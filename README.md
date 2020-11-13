@@ -8,7 +8,7 @@
 
 ![](demo/demo.gif)
 
-_(this gif is from the Forge version but it works the same)_
+_(this gif is from the Forge version for now but it works the same)_
 
 Allows for moving, jumping, sprinting, etc. from within inventories.
 
