@@ -29,12 +29,12 @@ Please DO NOT copy/paste the entire log here.
 Crashlogs can be found at .minecraft/crash-reports/
 
 **Version and Mod List**
-List the version of InvMove, the version of Forge, and the version of Minecraft the issue happens on:
+List the version of InvMove, the version of Fabric, and the version of Minecraft the issue happens on:
 InvMove: 
-Forge: 
+Fabric: 
 Minecraft: 
 
-List any other mods being used (other than Cloth Config):
+List any other mods being used:
 
 If possible, try to reproduce the bug with the smallest number of other mods you can. This can help me figure out where the problem occurs.
 However, if the issue is truly a compatibility problem with another mod, I will likely be able to fix it if you include the mod list.
