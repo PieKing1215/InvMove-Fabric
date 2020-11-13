@@ -29,9 +29,10 @@ Please DO NOT copy/paste the entire log here.
 Crashlogs can be found at .minecraft/crash-reports/
 
 **Version and Mod List**
-List the version of InvMove, the version of Fabric, and the version of Minecraft the issue happens on:
+List the version of InvMove, the version of Fabric Loader+API, and the version of Minecraft the issue happens on:
 InvMove: 
-Fabric: 
+Fabric Loader: 
+Fabric API: 
 Minecraft: 
 
 List any other mods being used:
