@@ -28,6 +28,7 @@
 
   "config.invmove.type.inventory": "Survival Inventory",
   "config.invmove.type.creative": "Creative Inventory",
+  "config.invmove.type.horse": "Horse Inventory",
   "config.invmove.type.chest": "Chest",
   "config.invmove.type.crafting": "Crafting Table",
   "config.invmove.type.furnace": "Furnace",

@@ -1,6 +1,14 @@
 package me.pieking1215.invmove;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.launch.common.FabricLauncherBase;
+import net.fabricmc.loader.launch.common.MappingConfiguration;
+import net.fabricmc.loom.util.Constants;
+import net.fabricmc.mapping.tree.ClassDef;
+import net.fabricmc.mapping.tree.TinyMappingFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.AddServerScreen;
 import net.minecraft.client.gui.screen.BackupPromptScreen;
@@ -69,8 +77,11 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +94,28 @@ public class InvMove implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		if(!InvMoveConfig.hasFinalizedConfig) InvMoveConfig.doneLoading();
+
+		HudRenderCallback.EVENT.register((ms, v) -> {
+
+			if(InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.debugDisplay, false)) {
+				Screen screen = MinecraftClient.getInstance().currentScreen;
+				if(screen == null) return;
+
+				int i = 0;
+				Class cl = screen.getClass();
+				while (cl.getSuperclass() != null) {
+					double scale = 1;
+					//String className = FabricLoader.getInstance().getMappingResolver().unmapClassName("named", cl.getName());
+					String className = cl.getName();
+					RenderSystem.scaled(scale, scale, 1);
+					MinecraftClient.getInstance().textRenderer.drawWithShadow(new MatrixStack(), className, 4, 4 + 10 * i, 0xffffffff);
+					RenderSystem.scaled(1 / scale, 1 / scale, 1);
+
+					i++;
+					cl = cl.getSuperclass();
+				}
+			}
+		});
 	}
 
 	public static void onInputUpdate(Input input){
@@ -189,27 +222,27 @@ public class InvMove implements ClientModInitializer {
 		}
 
 		Optional<Boolean> returnAndIgnoreUnrecognized = Optional.empty();
-		if(screen instanceof InventoryScreen)           returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.inventory, true));*/
-		if(screen instanceof HorseScreen)   		    returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.horseInventory, true));*/
-		if(screen instanceof CreativeInventoryScreen)   returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.creative, true));*/
-		if(screen instanceof CraftingScreen)            returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.crafting, true));*/
-		if(screen instanceof GenericContainerScreen)    returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.chest, true));*/
-		if(screen instanceof ShulkerBoxScreen)          returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.shulker, true));*/
-		if(screen instanceof Generic3x3ContainerScreen) returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.dispenser, true));*/
-		if(screen instanceof HopperScreen)              returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.hopper, true));*/
-		if(screen instanceof EnchantmentScreen)         returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.enchantment, true));*/
-		if(screen instanceof AnvilScreen)               returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.anvil, true));*/
-		if(screen instanceof BeaconScreen)              returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.beacon, true));*/
-		if(screen instanceof BrewingStandScreen)        returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.brewing, true));*/
-		if(screen instanceof FurnaceScreen)             returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.furnace, true));*/
-		if(screen instanceof BlastFurnaceScreen)        returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.blastFurnace, true));*/
-		if(screen instanceof SmokerScreen)              returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.smoker, true));*/
-		if(screen instanceof LoomScreen)                returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.loom, true));*/
-		if(screen instanceof CartographyTableScreen)    returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.cartography, true));*/
-		if(screen instanceof GrindstoneScreen)          returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.grindstone, true));*/
-		if(screen instanceof StonecutterScreen)         returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.stonecutter, true));*/
-		if(screen instanceof MerchantScreen)            returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.villager, true));*/
-		if(screen instanceof BookScreen)                returnAndIgnoreUnrecognized = Optional.of(true);/*Optional.of(Config.getBoolSafe(Config.UI_MOVEMENT.book, true));*/
+		if(screen instanceof InventoryScreen)           returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.inventory, true));
+		if(screen instanceof HorseScreen)   		    returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.horseInventory, true));
+		if(screen instanceof CreativeInventoryScreen)   returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.creative, true));
+		if(screen instanceof CraftingScreen)            returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.crafting, true));
+		if(screen instanceof GenericContainerScreen)    returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.chest, true));
+		if(screen instanceof ShulkerBoxScreen)          returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.shulker, true));
+		if(screen instanceof Generic3x3ContainerScreen) returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.dispenser, true));
+		if(screen instanceof HopperScreen)              returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.hopper, true));
+		if(screen instanceof EnchantmentScreen)         returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.enchantment, true));
+		if(screen instanceof AnvilScreen)               returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.anvil, true));
+		if(screen instanceof BeaconScreen)              returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.beacon, true));
+		if(screen instanceof BrewingStandScreen)        returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.brewing, true));
+		if(screen instanceof FurnaceScreen)             returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.furnace, true));
+		if(screen instanceof BlastFurnaceScreen)        returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.blastFurnace, true));
+		if(screen instanceof SmokerScreen)              returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.smoker, true));
+		if(screen instanceof LoomScreen)                returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.loom, true));
+		if(screen instanceof CartographyTableScreen)    returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.cartography, true));
+		if(screen instanceof GrindstoneScreen)          returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.grindstone, true));
+		if(screen instanceof StonecutterScreen)         returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.stonecutter, true));
+		if(screen instanceof MerchantScreen)            returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.villager, true));
+		if(screen instanceof BookScreen)                returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.book, true));
 
 //		Optional<Boolean> compatMove = Compatibility.shouldAllowMovement(screen);
 //		if(compatMove.isPresent()) return compatMove.get();
@@ -317,28 +350,28 @@ public class InvMove implements ClientModInitializer {
 		if(screen instanceof EditWorldScreen) return false;
 		if(screen instanceof JigsawBlockScreen) return false;
 
-		if(screen instanceof InventoryScreen)           return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.inventory, false);*/
-		if(screen instanceof HorseScreen)      			return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.horseInventory, false);*/
-		if(screen instanceof CreativeInventoryScreen)   return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.creative, false);*/
-		if(screen instanceof CraftingScreen)            return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.crafting, false);*/
-		if(screen instanceof GenericContainerScreen)    return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.chest, false);*/
-		if(screen instanceof ShulkerBoxScreen)          return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.shulker, false);*/
-		if(screen instanceof Generic3x3ContainerScreen) return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.dispenser, false);*/
-		if(screen instanceof HopperScreen)              return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.hopper, false);*/
-		if(screen instanceof EnchantmentScreen)         return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.enchantment, false);*/
-		if(screen instanceof AnvilScreen)               return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.anvil, false);*/
-		if(screen instanceof BeaconScreen)              return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.beacon, false);*/
-		if(screen instanceof BrewingStandScreen)        return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.brewing, false);*/
-		if(screen instanceof FurnaceScreen)             return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.furnace, false);*/
-		if(screen instanceof BlastFurnaceScreen)        return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.blastFurnace, false);*/
-		if(screen instanceof SmokerScreen)              return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.smoker, false);*/
-		if(screen instanceof LoomScreen)                return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.loom, false);*/
-		if(screen instanceof CartographyTableScreen)    return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.cartography, false);*/
-		if(screen instanceof GrindstoneScreen)          return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.grindstone, false);*/
-		if(screen instanceof StonecutterScreen)         return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.stonecutter, false);*/
-		if(screen instanceof MerchantScreen)            return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.villager, false);*/
-		if(screen instanceof BookScreen)            	return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.book, false);*/
-		if(screen instanceof BookEditScreen)            return true;/*!Config.getBoolSafe(Config.UI_BACKGROUND.book, false);*/
+		if(screen instanceof InventoryScreen)           return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.inventory, false);
+		if(screen instanceof HorseScreen)      			return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.horseInventory, false);
+		if(screen instanceof CreativeInventoryScreen)   return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.creative, false);
+		if(screen instanceof CraftingScreen)            return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.crafting, false);
+		if(screen instanceof GenericContainerScreen)    return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.chest, false);
+		if(screen instanceof ShulkerBoxScreen)          return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.shulker, false);
+		if(screen instanceof Generic3x3ContainerScreen) return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.dispenser, false);
+		if(screen instanceof HopperScreen)              return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.hopper, false);
+		if(screen instanceof EnchantmentScreen)         return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.enchantment, false);
+		if(screen instanceof AnvilScreen)               return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.anvil, false);
+		if(screen instanceof BeaconScreen)              return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.beacon, false);
+		if(screen instanceof BrewingStandScreen)        return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.brewing, false);
+		if(screen instanceof FurnaceScreen)             return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.furnace, false);
+		if(screen instanceof BlastFurnaceScreen)        return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.blastFurnace, false);
+		if(screen instanceof SmokerScreen)              return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.smoker, false);
+		if(screen instanceof LoomScreen)                return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.loom, false);
+		if(screen instanceof CartographyTableScreen)    return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.cartography, false);
+		if(screen instanceof GrindstoneScreen)          return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.grindstone, false);
+		if(screen instanceof StonecutterScreen)         return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.stonecutter, false);
+		if(screen instanceof MerchantScreen)            return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.villager, false);
+		if(screen instanceof BookScreen)            	return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.book, false);
+		if(screen instanceof BookEditScreen)            return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.book, false);
 
 
 //		Optional<Boolean> compatBack = Compatibility.shouldDisableBackground(screen);
