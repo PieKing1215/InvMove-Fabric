@@ -6,7 +6,7 @@
 
 ### Minecraft Fabric mod that adds the ability to walk around while in inventories
 
-### [Forge Version Here](https://github.com/PieKing1215/InvMove)
+### [Forge Version Here](https://github.com/PieKing1215/InvMove-Forge)
 
 ### NOTE: This Fabric version is still a WIP.<br>It is missing the per-inventory config and mod compatibilities that the Forge version has.<br>If you come across any problems, please [report them on the issues page](https://github.com/PieKing1215/InvMove-Fabric/issues).<br>
 <br>
