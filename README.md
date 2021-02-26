@@ -65,11 +65,6 @@ Do not download this mod from anywhere other than the InvMove-Fabric GitHub page
 This mod may not be reposted to any other third-party websites.<br>
 [#StopModReposts](https://stopmodreposts.org)
 
-Tested on<br>
-Fabric 0.10.6+build.214 for MC 1.16.4,
-Fabric 0.10.0+build.208 for MC 1.16.3
-on both singleplayer ~~and multiplayer~~ (this Fabric port is not not heavily tested yet).
-
 The mod is licensed under the [GNU General Public License v3.0](LICENSE.md)
 
 ## Upcoming
