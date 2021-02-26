@@ -3,6 +3,10 @@ plugins {
 	id 'maven-publish'
 }
 
+repositories {
+	maven { url "https://maven.shedaniel.me/" }
+}
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -19,11 +23,11 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
-	modApi("me.shedaniel.cloth:config-2:4.8.3") {
+	modImplementation "io.github.prospector:modmenu:2.0.0-beta.1+build.2"
+	modApi("me.shedaniel.cloth:config-2:5.0.0") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:config-2:4.8.3"
+	include "me.shedaniel.cloth:config-2:5.0.0"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

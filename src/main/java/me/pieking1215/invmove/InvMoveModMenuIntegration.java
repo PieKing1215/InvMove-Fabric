@@ -5,11 +5,6 @@ import io.github.prospector.modmenu.api.ModMenuApi;
 
 public class InvMoveModMenuIntegration implements ModMenuApi {
     @Override
-    public String getModId() {
-        return "invmove"; // Return your modid here
-    }
-
-    @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return InvMoveConfig::registerClothConfig;
     }
