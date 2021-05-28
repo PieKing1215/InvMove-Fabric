@@ -32,7 +32,7 @@ Allows for moving, jumping, sprinting, etc. from within inventories.
 
 Also disables the darkened background in inventories that don't pause the game.
 
-~~Both features can be toggled on or off per-inventory in the config menu.~~ (not ported yet)
+Both features can be toggled on or off per-inventory in the config menu.
 
 This mod is client-side, but it may raise alarms if used on servers with anticheat.<br>
 I take no responsibility if you get banned or something because you used this on public servers.
@@ -45,8 +45,8 @@ Made after [I couldn't find an existing mod for this](https://redd.it/egwe8w).
 <details>
   <summary>Click to expand.</summary>
 
-![](https://raw.githubusercontent.com/PieKing1215/InvMove-Forge/master/demo/where_config.png)
-<img src="demo/config_screen.png" alt="alt text" width="657" height="528">
+![](https://raw.githubusercontent.com/PieKing1215/InvMove-Fabric/master/demo/where_config.png)
+<img src="https://raw.githubusercontent.com/PieKing1215/InvMove-Fabric/master/demo/config_screen.png" alt="alt text" width="657" height="528">
 ### InvMove has an in-game config menu which can be accessed from the mod list using the [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu) mod.<br>
 In the config menu, you can find several options:<br>
 #### General:
