@@ -51,7 +51,7 @@ Made after [I couldn't find an existing mod for this](https://redd.it/egwe8w).
 In the config menu, you can find several options:<br>
 #### General:
 - Enable: Enable the entire mod
-- ~~Debug Display: Enables a debug overlay that can help debug compatibility problems.~~ (not ported yet)
+- Debug Display: Enables a debug overlay that can help debug compatibility problems.
 
 #### UI Movement:
 - Move In Inventories: Enable movement in inventories
@@ -59,11 +59,11 @@ In the config menu, you can find several options:<br>
 - Allow Jumping: Allow jumping in inventories
 - Allow Dismounting: Allow dismounting from mounts in inventories (overrides "Allow Sneaking" while on a mount)
 - Text Field Disables Movement: Disable movement when a text field is focused (like search bars or in an anvil)
-- ~~(Expandable categories that let you enable/disable movement for certain inventories)~~ (not ported yet)
+- (Expandable categories that let you enable/disable movement for certain inventories)
 
 #### UI Background:
 - Hide Inventory Backgrounds: Hides the background tint while in inventories.
-- ~~(Expandable categories that let you enable/disable the background for certain inventories)~~ (not ported yet)
+- (Expandable categories that let you enable/disable the background for certain inventories)
   
 </details>
 
