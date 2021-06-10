@@ -1,6 +1,6 @@
 package me.pieking1215.invmove;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.google.common.base.Preconditions;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
@@ -93,9 +93,9 @@ public class InvMove implements ClientModInitializer {
 				if(screen == null) return;
 
 				int i = 0;
-				Class cl = screen.getClass();
+				Class<?> cl = screen.getClass();
 				while (cl.getSuperclass() != null) {
-					double scale = 1;
+					//double scale = 1;
 					//String className = FabricLoader.getInstance().getMappingResolver().unmapClassName("named", cl.getName());
 					String className = cl.getName();
 					//RenderSystem.scaled(scale, scale, 1); // this doesn't work in 1.17 and idc enough to figure it out
@@ -119,6 +119,7 @@ public class InvMove implements ClientModInitializer {
 			MinecraftClient.getInstance().options.keyDrop.setPressed(false);
 
 			// tick movement
+			Preconditions.checkNotNull(MinecraftClient.getInstance().player);
 			manualTickMovement(input, MinecraftClient.getInstance().player.shouldSlowDown(), MinecraftClient.getInstance().player.isSpectator());
 
 			// set sprinting using raw keybind data
@@ -135,7 +136,10 @@ public class InvMove implements ClientModInitializer {
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.enabled, true)) return false;
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.moveInInventories, true)) return false;
 
-		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer() && !MinecraftClient.getInstance().getServer().isRemote()) return false;
+		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
+			Preconditions.checkNotNull(MinecraftClient.getInstance().getServer());
+			if(!MinecraftClient.getInstance().getServer().isRemote()) return false;
+		}
 
 		if(screen instanceof AddServerScreen) return false;
 		if(screen instanceof NoticeScreen) return false;
@@ -202,10 +206,12 @@ public class InvMove implements ClientModInitializer {
 			if (screen instanceof RecipeBookProvider) {
 				try {
 					RecipeBookWidget wid = ((RecipeBookProvider) screen).getRecipeBookWidget();
-					Field searchField = Stream.of(RecipeBookWidget.class.getDeclaredFields()).filter(f -> f.getType() == TextFieldWidget.class).findFirst().get();
-					searchField.setAccessible(true);
-					TextFieldWidget searchBar = (TextFieldWidget)searchField.get(wid);
-					if (searchBar != null && searchBar.isActive()) return false;
+					Field searchField = Stream.of(RecipeBookWidget.class.getDeclaredFields()).filter(f -> f.getType() == TextFieldWidget.class).findFirst().orElse(null);
+					if(searchField != null) {
+						searchField.setAccessible(true);
+						TextFieldWidget searchBar = (TextFieldWidget) searchField.get(wid);
+						if (searchBar != null && searchBar.isActive()) return false;
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -250,7 +256,7 @@ public class InvMove implements ClientModInitializer {
 		return true;
 	}
 
-	public static Field[] getDeclaredFieldsSuper(Class aClass) {
+	public static Field[] getDeclaredFieldsSuper(Class<?> aClass) {
 		List<Field> fs = new ArrayList<>();
 
 		do{
@@ -297,7 +303,11 @@ public class InvMove implements ClientModInitializer {
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.uiBackground, true)) return false;
 
 		if(screen == null) return false;
-		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer() && !MinecraftClient.getInstance().getServer().isRemote()) return false;
+
+		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
+			Preconditions.checkNotNull(MinecraftClient.getInstance().getServer());
+			if(!MinecraftClient.getInstance().getServer().isRemote()) return false;
+		}
 
 		if(screen instanceof AddServerScreen) return false;
 		if(screen instanceof NoticeScreen) return false;

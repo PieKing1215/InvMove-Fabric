@@ -27,7 +27,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "invmove.mixins.json"
   ],
 
   "depends": {
