@@ -98,9 +98,9 @@ public class InvMove implements ClientModInitializer {
 					double scale = 1;
 					//String className = FabricLoader.getInstance().getMappingResolver().unmapClassName("named", cl.getName());
 					String className = cl.getName();
-					RenderSystem.scaled(scale, scale, 1);
+					//RenderSystem.scaled(scale, scale, 1); // this doesn't work in 1.17 and idc enough to figure it out
 					MinecraftClient.getInstance().textRenderer.drawWithShadow(new MatrixStack(), className, 4, 4 + 10 * i, 0xffffffff);
-					RenderSystem.scaled(1 / scale, 1 / scale, 1);
+					//RenderSystem.scaled(1 / scale, 1 / scale, 1);
 
 					i++;
 					cl = cl.getSuperclass();
