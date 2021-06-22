@@ -83,7 +83,7 @@ Do not download this mod from anywhere other than the InvMove-Fabric GitHub, Cur
 This mod may not be reposted to any other third-party websites.<br>
 [#StopModReposts](https://stopmodreposts.org)
 
-The mod is licensed under the [GNU Lesser General Public License v3.0](COPYING)
+The mod is licensed under the [GNU Lesser General Public License v3.0](https://github.com/PieKing1215/InvMove-Fabric/blob/master/COPYING)
 
 ## Upcoming
 Porting the rest of the features from the Forge version
