@@ -15,7 +15,7 @@
     "issues": "https://github.com/PieKing1215/InvMove-Fabric/issues"
   },
 
-  "license": "GPL v3.0",
+  "license": "LGPL v3.0",
   "icon": "assets/invmove/icon.png",
 
   "entrypoints": {
