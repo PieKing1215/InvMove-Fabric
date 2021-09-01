@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public class ExampleMixin {
+public class MovementMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/TutorialManager;onMovement(Lnet/minecraft/client/input/Input;)V"), method = "tickMovement()V")
 	private void onInputUpdate(CallbackInfo info) {
 		InvMove.onInputUpdate(((ClientPlayerEntity)(Object)this).input);
