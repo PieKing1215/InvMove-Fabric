@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import me.pieking1215.invmove.compat.Compatibility;
+import me.pieking1215.invmove.compat.ModCompatibility;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -35,6 +37,7 @@ public class InvMoveConfig {
 
     public static boolean hasFinalizedConfig = false;
     public static File configFile;
+    public static HashMap<String, File> modCompatConfigs;
 
     public static final Function<Boolean, Text> MOVEMENT_YES_NO_TEXT = b -> new LiteralText(b ? Formatting.GREEN + "Allow Movement" : Formatting.RED + "Disallow Movement");
     public static final Function<Boolean, Text> BACKGROUND_YES_NO_TEXT = b -> new LiteralText(b ? Formatting.GREEN + "Hide Background" : Formatting.RED + "Show Background");
@@ -181,6 +184,26 @@ public class InvMoveConfig {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        modCompatConfigs = new HashMap<>();
+        for(String modid : Compatibility.getCompatibilities().keySet()){
+            try {
+                File f = new File(FabricLoader.getInstance().getConfigDir().toFile(), "invMove/" + modid + ".json");
+                f.getParentFile().mkdirs();
+                if(!f.exists()) f.createNewFile();
+                modCompatConfigs.put(modid, f);
+
+                JsonReader jr = new JsonReader(new FileReader(f));
+                JsonElement jp = new JsonParser().parse(jr);
+                if(jp.isJsonObject()) {
+                    JsonObject obj = jp.getAsJsonObject();
+                    Compatibility.getCompatibilities().get(modid).loadConfig(obj);
+                }
+                jr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static Screen registerClothConfig(Screen parent) {
@@ -226,13 +249,13 @@ public class InvMoveConfig {
         movementTypes.add(eb.startBooleanToggle(new TranslatableText("config.invmove.type.book"),         getBoolSafe(UI_MOVEMENT.book, true)).setDefaultValue(true).setSaveConsumer(UI_MOVEMENT.book::set                ).setYesNoTextSupplier(MOVEMENT_YES_NO_TEXT).build());
         movement.addEntry(movementTypes.build());
 
-//        for(String modid : Compatibility.getCompatibilities().keySet()){
-//            SubCategoryBuilder compatCat = eb.startSubCategory(new LiteralText(ModList.get().getModContainerById(modid).get().getModInfo().getDisplayName()));
-//            compatCat.setTooltip(new LiteralText(TextFormatting.GRAY + "ModID: " + modid));
-//            if(Compatibility.getCompatibilities().get(modid).setupClothMovement(compatCat, eb)) {
-//                movement.addEntry(compatCat.build());
-//            }
-//        }
+        for(String modid : Compatibility.getCompatibilities().keySet()){
+            SubCategoryBuilder compatCat = eb.startSubCategory(new LiteralText(FabricLoader.getInstance().getModContainer(modid).get().getMetadata().getName()));
+            compatCat.setTooltip(new LiteralText(Formatting.GRAY + "ModID: " + modid));
+            if(Compatibility.getCompatibilities().get(modid).setupClothMovement(compatCat, eb)) {
+                movement.addEntry(compatCat.build());
+            }
+        }
 
 //        SubCategoryBuilder movementTypesSeen = eb.startSubCategory(new TranslatableText("key.invmove.category.types.unrecognized"));
 //        movementTypesSeen.setTooltip(Arrays.stream(I18n.translate("tooltip.config.invmove.unrecognized_desc").split("\n")).map(LiteralText::new).toArray(LiteralText[]::new));
@@ -272,13 +295,13 @@ public class InvMoveConfig {
         backgroundTypes.add(eb.startBooleanToggle(new TranslatableText("config.invmove.type.book"),         !getBoolSafe(UI_BACKGROUND.book, false)).setDefaultValue(true).setSaveConsumer(b -> UI_BACKGROUND.book.set(!b)                ).setYesNoTextSupplier(BACKGROUND_YES_NO_TEXT).build());
         background.addEntry(backgroundTypes.build());
 
-//        for(String modid : Compatibility.getCompatibilities().keySet()){
-//            SubCategoryBuilder compatCat = eb.startSubCategory(new LiteralText(ModList.get().getModContainerById(modid).get().getModInfo().getDisplayName()));
-//            compatCat.setTooltip(new LiteralText(TextFormatting.GRAY + "ModID: " + modid));
-//            if(Compatibility.getCompatibilities().get(modid).setupClothBackground(compatCat, eb)) {
-//                background.addEntry(compatCat.build());
-//            }
-//        }
+        for(String modid : Compatibility.getCompatibilities().keySet()){
+            SubCategoryBuilder compatCat = eb.startSubCategory(new LiteralText(FabricLoader.getInstance().getModContainer(modid).get().getMetadata().getName()));
+            compatCat.setTooltip(new LiteralText(Formatting.GRAY + "ModID: " + modid));
+            if(Compatibility.getCompatibilities().get(modid).setupClothBackground(compatCat, eb)) {
+                background.addEntry(compatCat.build());
+            }
+        }
 
 //        SubCategoryBuilder backgroundTypesSeen = eb.startSubCategory(new TranslatableText("key.invmove.category.types.unrecognized"));
 //        backgroundTypesSeen.setTooltip(Arrays.stream(I18n.translate("tooltip.config.invmove.unrecognized_desc").split("\n")).map(LiteralText::new).toArray(LiteralText[]::new));
@@ -374,6 +397,25 @@ public class InvMoveConfig {
                 }
             }catch(IOException e){
                 e.printStackTrace();
+            }
+
+            for(String modid : modCompatConfigs.keySet()){
+                ModCompatibility compat;
+                File f;
+                if((f = modCompatConfigs.get(modid)) != null && (compat = Compatibility.getCompatibilities().get(modid)) != null){
+                    try {
+                        f.getParentFile().mkdirs();
+                        if (!f.exists()) f.createNewFile();
+                        JsonWriter jw = new JsonWriter(new FileWriter(f));
+                        jw.setIndent("  ");
+                        jw.beginObject();
+                        compat.saveConfig(jw);
+                        jw.endObject();
+                        jw.close();
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
             }
 
         });
