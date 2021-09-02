@@ -126,7 +126,9 @@ public class InvMove implements ClientModInitializer {
 			manualTickMovement(input, MinecraftClient.getInstance().player.shouldSlowDown(), MinecraftClient.getInstance().player.isSpectator());
 
 			// set sprinting using raw keybind data
-			MinecraftClient.getInstance().player.setSprinting(rawIsKeyDown(MinecraftClient.getInstance().options.keySprint));
+			if(!MinecraftClient.getInstance().player.isSprinting()) {
+				MinecraftClient.getInstance().player.setSprinting(rawIsKeyDown(MinecraftClient.getInstance().options.keySprint));
+			}
 
 		}else if(MinecraftClient.getInstance().currentScreen != null){
 			KeyBinding.unpressAll();
