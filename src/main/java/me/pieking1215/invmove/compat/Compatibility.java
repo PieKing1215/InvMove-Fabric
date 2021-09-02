@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class Compatibility {
 
@@ -15,10 +16,11 @@ public class Compatibility {
         // it's linked since the order matters
         compats = new LinkedHashMap<>();
 
-        LinkedHashMap<String, String> compatMods = new LinkedHashMap<>();
+        LinkedHashMap<String, Supplier<ModCompatibility>> compatMods = new LinkedHashMap<>();
 
         // mods with special behavior in shouldAllowMovement or
         //   shouldDisableBackground that need to have higher priority
+        compatMods.put("roughlyenoughitems", REICompatibility::new);
 //        compatMods.put("jei"                 , "me.pieking1215.invmove.compat.JEICompatibility");
 //        compatMods.put("quark"               , "me.pieking1215.invmove.compat.QuarkCompatibility");
 //
@@ -47,7 +49,7 @@ public class Compatibility {
         for (String s : compatMods.keySet()){
             if(FabricLoader.getInstance().isModLoaded(s)){
                 try {
-                    compats.put(s, Class.forName(compatMods.get(s)).asSubclass(ModCompatibility.class).getDeclaredConstructor().newInstance());
+                    compats.put(s, compatMods.get(s).get());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

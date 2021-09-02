@@ -2,6 +2,7 @@ package me.pieking1215.invmove;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.google.common.base.Preconditions;
+import me.pieking1215.invmove.compat.Compatibility;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
@@ -85,6 +86,7 @@ public class InvMove implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		Compatibility.loadCompatibility();
 		if(!InvMoveConfig.hasFinalizedConfig) InvMoveConfig.doneLoading();
 
 		HudRenderCallback.EVENT.register((ms, v) -> {
@@ -242,8 +244,8 @@ public class InvMove implements ClientModInitializer {
 		if(screen instanceof MerchantScreen)            returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.villager, true));
 		if(screen instanceof BookScreen)                returnAndIgnoreUnrecognized = Optional.of(InvMoveConfig.getBoolSafe(InvMoveConfig.UI_MOVEMENT.book, true));
 
-//		Optional<Boolean> compatMove = Compatibility.shouldAllowMovement(screen);
-//		if(compatMove.isPresent()) return compatMove.get();
+		Optional<Boolean> compatMove = Compatibility.shouldAllowMovement(screen);
+		if(compatMove.isPresent()) return compatMove.get();
 
 		if(returnAndIgnoreUnrecognized.isPresent()) return returnAndIgnoreUnrecognized.get();
 
@@ -376,8 +378,8 @@ public class InvMove implements ClientModInitializer {
 		if(screen instanceof BookEditScreen)            return !InvMoveConfig.getBoolSafe(InvMoveConfig.UI_BACKGROUND.book, false);
 
 
-//		Optional<Boolean> compatBack = Compatibility.shouldDisableBackground(screen);
-//		if(compatBack.isPresent()) return compatBack.get();
+		Optional<Boolean> compatBack = Compatibility.shouldDisableBackground(screen);
+		if(compatBack.isPresent()) return compatBack.get();
 
 //		Class<? extends Screen> scr = screen.getClass();
 //		if(Config.UI_BACKGROUND.seenScreens.containsKey(scr.getName())){

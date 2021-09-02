@@ -24,6 +24,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	modImplementation "me.shedaniel:RoughlyEnoughItems:5.12.248"
+
 	modImplementation "com.terraformersmc:modmenu:1.16.15"
 	modApi("me.shedaniel.cloth:cloth-config-fabric:4.11.26") {
 		exclude(group: "net.fabricmc.fabric-api")
