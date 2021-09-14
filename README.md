@@ -69,9 +69,20 @@ In the config menu, you can find several options:<br>
   
 </details>
 
-## ~~Compatibility / Mod Support~~ (not ported yet)
+## Compatibility / Mod Support
 <details>
   <summary>Click to expand.</summary>
+
+InvMove has specific support for certain mods, <strike>but any GUIs from unrecognized mods are added into the config dynamically and can be manually enabled.</strike> (not ported yet)<br>
+<strike>Unrecognized GUIs will only appear in the config once they have been opened/seen in-game.</strike>
+
+Explicitly supported mods have their own sections in the config, and come with tested default settings.
+
+If you find problems with any of the explicitly supported mods, please start a ticket in the [issue tracker](https://github.com/PieKing1215/InvMove-Fabric/issues).<br>
+If there's a mod you want to be added, also please start a ticket in the [issue tracker](https://github.com/PieKing1215/InvMove-Fabric/issues), <strike>especially if it doesn't work enabling it from the "unrecognized" section of the config</strike>.
+
+InvMove Fabric explicitly supports the following mods (as of version 0.1.0):
+- [Roughly Enough Items Fabric (REI)](https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items) (1.16-1.17)
   
 </details>
 
@@ -86,4 +97,4 @@ This mod may not be reposted to any other third-party websites.<br>
 The mod is licensed under the [GNU Lesser General Public License v3.0](https://github.com/PieKing1215/InvMove-Fabric/blob/master/COPYING)
 
 ## Upcoming
-Porting the rest of the features from the Forge version
+Porting the unrecognized GUIs feature from the Forge version
