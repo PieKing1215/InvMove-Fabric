@@ -96,7 +96,7 @@ public class InvMove implements ClientModInitializer {
 				if(screen == null) return;
 
 				int i = 0;
-				Class cl = screen.getClass();
+				Class<?> cl = screen.getClass();
 				while (cl.getSuperclass() != null) {
 					double scale = 1;
 					//String className = FabricLoader.getInstance().getMappingResolver().unmapClassName("named", cl.getName());

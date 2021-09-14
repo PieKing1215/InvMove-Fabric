@@ -31,10 +31,7 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:4.11.26") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:config-2:4.11.26"
-
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+//	include "me.shedaniel.cloth:config-2:4.11.26"
 }
 
 processResources {
