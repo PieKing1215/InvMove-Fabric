@@ -1,6 +1,5 @@
 package me.pieking1215.invmove;
 
-import com.google.common.base.Preconditions;
 import me.pieking1215.invmove.compat.Compatibility;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -112,6 +111,7 @@ public class InvMove implements ClientModInitializer {
 	}
 
 	public static void onInputUpdate(Input input){
+		if(MinecraftClient.getInstance().player == null) return;
 		if(allowMovementInScreen(MinecraftClient.getInstance().currentScreen)){
 
 			// tick keybinds (since opening the ui unpresses all keys)
@@ -121,7 +121,6 @@ public class InvMove implements ClientModInitializer {
 			MinecraftClient.getInstance().options.keyDrop.setPressed(false);
 
 			// tick movement
-			Preconditions.checkNotNull(MinecraftClient.getInstance().player);
 			manualTickMovement(input, MinecraftClient.getInstance().player.shouldSlowDown(), MinecraftClient.getInstance().player.isSpectator());
 
 			// set sprinting using raw keybind data
@@ -141,8 +140,11 @@ public class InvMove implements ClientModInitializer {
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.moveInInventories, true)) return false;
 
 		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
-			Preconditions.checkNotNull(MinecraftClient.getInstance().getServer());
-			if(!MinecraftClient.getInstance().getServer().isRemote()) return false;
+			if(MinecraftClient.getInstance().getServer() != null) {
+				if (!MinecraftClient.getInstance().getServer().isRemote()) return false;
+			} else {
+				return false;
+			}
 		}
 
 		if(screen instanceof AddServerScreen) return false;
@@ -309,8 +311,11 @@ public class InvMove implements ClientModInitializer {
 		if(screen == null) return false;
 
 		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
-			Preconditions.checkNotNull(MinecraftClient.getInstance().getServer());
-			if(!MinecraftClient.getInstance().getServer().isRemote()) return false;
+			if(MinecraftClient.getInstance().getServer() != null) {
+				if (!MinecraftClient.getInstance().getServer().isRemote()) return false;
+			} else {
+				return false;
+			}
 		}
 
 		if(screen instanceof AddServerScreen) return false;
