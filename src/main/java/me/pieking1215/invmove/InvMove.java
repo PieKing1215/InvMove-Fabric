@@ -139,7 +139,7 @@ public class InvMove implements ClientModInitializer {
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.enabled, true)) return false;
 		if(!InvMoveConfig.getBoolSafe(InvMoveConfig.GENERAL.moveInInventories, true)) return false;
 
-		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
+		if(screen.shouldPause() && MinecraftClient.getInstance().isInSingleplayer()){
 			if(MinecraftClient.getInstance().getServer() != null) {
 				if (!MinecraftClient.getInstance().getServer().isRemote()) return false;
 			} else {
@@ -310,7 +310,7 @@ public class InvMove implements ClientModInitializer {
 
 		if(screen == null) return false;
 
-		if(screen.isPauseScreen() && MinecraftClient.getInstance().isInSingleplayer()){
+		if(screen.shouldPause() && MinecraftClient.getInstance().isInSingleplayer()){
 			if(MinecraftClient.getInstance().getServer() != null) {
 				if (!MinecraftClient.getInstance().getServer().isRemote()) return false;
 			} else {
