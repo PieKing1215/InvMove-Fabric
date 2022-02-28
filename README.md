@@ -1,4 +1,4 @@
-<h1>[ARCHIVED] InvMove (Fabric)<br>
+<h1>[LEGACY] InvMove (Fabric)<br>
   <a href="https://www.curseforge.com/minecraft/mc-mods/invmove-fabric"><img src="http://cf.way2muchnoise.eu/versions/%20For%20MC%20_419550_all(555-0C8E8E-fff-010101).svg" alt="Supported Versions"></a>
   <a href="https://github.com/PieKing1215/InvMove-Fabric/blob/master/COPYING"><img src="https://img.shields.io/github/license/PieKing1215/InvMove-Fabric?style=flat&color=0C8E8E" alt="License"></a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/invmove-fabric"><img src="http://cf.way2muchnoise.eu/full_419550_downloads(E04E14-555-fff-010101-1C1C1C).svg" alt="CF Download Count"></a>
